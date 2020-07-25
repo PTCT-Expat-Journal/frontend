@@ -4,11 +4,16 @@
     align-items: center;
     flex-direction: column;
     background-color: antiquewhite;
+    flex-wrap: wrap;
 }
 .myTrips{
-    width:80%;  
+    width:50%;  
 }
 
-.Card{
+.myCardGroup{
+    display:flex;
+    flex-wrap: wrap;
+}
+.myCard{
     margin:5px;
 }
