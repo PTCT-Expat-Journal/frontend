@@ -4,7 +4,6 @@
     align-items: center;
     flex-direction: column;
     background-color: antiquewhite;
-    flex-wrap: wrap;
 }
 .myTrips{
     width:50%;  
