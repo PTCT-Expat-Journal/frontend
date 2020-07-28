@@ -9,16 +9,21 @@ const schema = yup.object().shape({
     .required('Please enter your email.')
     .matches(/^[0-9]{10}$/),
   password: yup.string().required('Please enter your password.').min(8),
-  comfirmpassword: yup.string().required('Please recomfirm your password.').min(8),
+  confirmPassword: yup.string().required('Please reconfirm your password.').min(8),
 });
 
 const defaultFormState = {
   username: '',
   email: '',
   password: '',
-  comfirmpassword: '',
+  confirmPassword: '',
 };
-const defaultErrorState = {};
+const defaultErrorState = {
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
 
 const SignUp = (props) => {
   const [formState, setFormState] = useState(defaultFormState);
@@ -27,36 +32,38 @@ const SignUp = (props) => {
 
   const validate = (e) => {
     yup
-      .reach(schema, e.target.username)
+      .reach(schema, e.target.name)
       .validate(e.target.value)
-      .then((valid) => setErrors({ ...errors, [e.target.username]: '' }))
-      .catch((err) => setErrors({ ...errors, [e.target.username]: err.errors[0] }));
+      .then((valid) => setErrors({ ...errors, [e.target.name]: '' }))
+      .catch((err) => setErrors({ ...errors, [e.target.name]: err.errors[0] }));
   };
 
   // redo the handle
   const handleChange = (e) => {
-    if (e.target.type === 'textkbox') {
+    e.persist();
+    if (e.target.type === 'text') {
       setFormState({
         ...formState,
-        [e.target.username]: e.target.value,
+        [e.target.name]: e.target.value,
       });
     }
-    if (e.target.username === 'username' || e.target.email === 'email') {
+    if (e.target.name === 'username' || e.target.name === 'email') {
       validate(e);
     }
   };
 
-  const handleSumbmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formState);
   };
+
   return (
     <FormContainer>
-      <form onSubmit={handleSumbmit}>
+      <form onSubmit={handleSubmit}>
         <h1>Sign up Now!</h1>
         <fieldset>
           <label>
-            User Name{' '}
+            User Name
             <input
               type="text"
               name="username"
@@ -64,10 +71,21 @@ const SignUp = (props) => {
               data-cy="username"
               value={formState.username}
             />
-            {errors.username > 0 && <p style={{ color: 'red' }}>{errors.username}</p>}
+            {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
           </label>
           <label>
-            Password{' '}
+            Email
+            <input
+              type="text"
+              name="email"
+              onChange={handleChange}
+              data-cy="email"
+              value={formState.email}
+            />
+            {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+          </label>
+          <label>
+            Password
             <input
               type="text"
               name="password"
@@ -76,14 +94,15 @@ const SignUp = (props) => {
               value={formState.password}
             />
           </label>
+
           <label>
-            Comfirm Password{' '}
+            Confirm Password
             <input
               type="text"
-              name="comfirm_password"
+              name="confirmPassword"
               onChange={handleChange}
-              data-cy="comfirmpassword"
-              value={formState.comfirmpassword}
+              data-cy="confirmPassword"
+              value={formState.confirmPassword}
             />
           </label>
         </fieldset>
